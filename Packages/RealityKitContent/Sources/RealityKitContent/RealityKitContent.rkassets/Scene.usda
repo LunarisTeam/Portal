@@ -1,35 +1,170 @@
 #usda 1.0
 (
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (448.60.4)"
+    }
     defaultPrim = "Root"
     metersPerUnit = 1
     upAxis = "Y"
 )
 
-reorder rootPrims = ["Root", "GridMaterial"]
-
-def Xform "Root"
+def Xform "Root" (
+    customData = {
+        float3 rotationEulerHint = (0, -0.7884952, 0)
+    }
+)
 {
-    reorder nameChildren = ["GridMaterial", "Sphere"]
-    rel material:binding = None (
-        bindMaterialAs = "weakerThanDescendants"
-    )
+    reorder nameChildren = ["Spaceship", "Meteor_explosion", "laser_beam_not_animated", "laser_beam_not_animated_1", "laser_beam_not_animated_2", "laser_beam_not_animated_3", "Laser_Beams", "Explosion", "Disable_Beam", "SkySphere", "Enable_Beam"]
+    quatf xformOp:orient = (0.92328584, 0, -0.3841136, 0)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-    def Sphere "Sphere" (
+    def RealityKitTimeline "Laser_Beams"
+    {
+        reorder nameChildren = ["Track", "Track2"]
+        def RealityKitTrack "Track"
+        {
+            reorder nameChildren = ["Transform_To", "Transform_To_1"]
+            def RealityKitAction "Transform_To_1"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 0.6286170629271071
+                uniform token info:id = "8A40E893-C1BC-41E9-B396-C2CAA2F3DF83"
+                float3 position = (0.5981646, 0.020597696, -0.824254)
+                quatf rotation = (0.9232858, 0, -0.38411364, 0)
+                float3 scale = (0.00049600843, 0.0004960084, 0.0004960084)
+                double startTime = 0
+                rel target = </Root/laser_beam_not_animated_3>
+                float2 ui:nodegraph:node:pos = (20, 20)
+                int ui:nodegraph:node:stackingOrder = 1
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                }
+            }
+        }
+
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Transform_To"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 0.6471027904328018
+                uniform token info:id = "8A40E893-C1BC-41E9-B396-C2CAA2F3DF83"
+                float3 position = (0.71140736, 0.02059793, -0.60002804)
+                quatf rotation = (0.9232858, 0, -0.38411364, 0)
+                float3 scale = (0.00049600843, 0.0004960084, 0.0004960084)
+                double startTime = 0
+                rel target = </Root/laser_beam_not_animated_2>
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                }
+            }
+        }
+    }
+
+    def RealityKitTimeline "Explosion"
+    {
+        reorder nameChildren = ["Track", "Track2"]
+        def RealityKitTrack "Track"
+        {
+            reorder nameChildren = ["Animation", "Enable_Beam"]
+            def RealityKitAction "Animation"
+            {
+                string actionKind = "animation"
+                string animation = "default subtree animation"
+                int blendLayer = 500
+                double duration = 4.958333492279053
+                uniform token info:id = "AF6BF668-F3AF-429B-820C-43BD0387C984"
+                bool separateAnimatedValue = 1
+                double startTime = 0
+                rel target = </Root/Meteor_explosion>
+
+                def RealityKitStruct "handoffType"
+                {
+                }
+            }
+        }
+
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Enable_Beam"
+            {
+                string actionKind = "timeline"
+                int blendLayer = 500
+                double duration = 0.5502251211136674
+                uniform token info:id = "56BFAC20-498A-477A-9F34-34ABBBD0E123"
+                double startTime = 0
+                rel timeline = </Root/Enable_Beam>
+            }
+        }
+    }
+
+    def "Spaceship" (
         active = true
-        prepend apiSchemas = ["MaterialBindingAPI"]
+        customData = {
+            float3 rotationEulerHint = (0, -0.7884952, 0)
+        }
+        references = @Spaceship.usdz@
     )
     {
-        reorder nameChildren = ["Collider", "InputTarget", "GridMaterial"]
-        rel material:binding = </Root/GridMaterial/GridMaterial> (
-            bindMaterialAs = "weakerThanDescendants"
-        )
-        double radius = 0.1
-        quatf xformOp:orient = (1, 0, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
+        quatf xformOp:orient = (0.9232858, 0, -0.3841136, 0)
+        float3 xformOp:scale = (0.0010000002, 0.001, 0.0010000003)
+        float3 xformOp:translate = (-0.5949258, 0, 0.5912524)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-        def RealityKitComponent "Collider"
+        def RealityKitComponent "RCP_BehaviorsContainer"
+        {
+            rel behaviors = </Root/Spaceship/OnTap>
+            uniform token info:id = "RCP.BehaviorsContainer"
+        }
+
+        def Preliminary_Behavior "OnTap"
+        {
+            rel actions = </Root/Spaceship/OnTap/Action>
+            uniform bool exclusive
+            rel triggers = </Root/Spaceship/OnTap/Trigger>
+
+            def Preliminary_Trigger "Trigger"
+            {
+                rel affectedObjects = </Root/Spaceship>
+                token info:id = "TapGesture"
+            }
+
+            def Preliminary_Action "Action"
+            {
+                rel affectedObjects = </Root>
+                rel animationLibraryKey = </Root/Laser_Beams>
+                rel animationLibraryKeyOverrideKey = </Root/Spaceship/OnTap/Trigger>
+                token info:id = "PlayTimeline"
+                int loops = 0
+                int performCount = 1
+                token type = "serial"
+            }
+        }
+
+        def RealityKitComponent "InputTarget"
+        {
+            uniform token info:id = "RealityKit.InputTarget"
+        }
+
+        def RealityKitComponent "Collider" (
+            active = false
+        )
         {
             uint group = 1
             uniform token info:id = "RealityKit.Collider"
@@ -38,25 +173,372 @@ def Xform "Root"
 
             def RealityKitStruct "Shape"
             {
-                float3 extent = (0.2, 0.2, 0.2)
-                float radius = 0.1
-                token shapeType = "Sphere"
+                float3 extent = (425.6321, 220.02904, 595.96875)
+                token shapeType = "Box"
+
+                def RealityKitStruct "pose"
+                {
+                    float3 position = (0, 54.14913, -50.265778)
+                }
             }
         }
 
-        def RealityKitComponent "InputTarget"
+        def RealityKitComponent "RigidBody" (
+            active = false
+        )
         {
-            uniform token info:id = "RealityKit.InputTarget"
+            bool gravityEnabled = 0
+            uniform token info:id = "RealityKit.RigidBody"
+
+            def RealityKitStruct "massFrame"
+            {
+                def RealityKitStruct "m_pose"
+                {
+                }
+            }
+
+            def RealityKitStruct "material"
+            {
+            }
         }
     }
 
-    def "GridMaterial" (
+    def "Meteor_explosion" (
         active = true
-        references = @Materials/GridMaterial.usda@
+        customData = {
+            float3 rotationEulerHint = (0, -0.7884952, 0)
+        }
+        references = @Meteor_explosion.usdz@
     )
     {
-        float3 xformOp:scale = (1, 1, 1)
+        quatf xformOp:orient = (0.92328584, 0, -0.38411367, 0)
+        float3 xformOp:scale = (0.0017102122, 0.0017102121, 0.0017102122)
+        float3 xformOp:translate = (0.7231885, 0.040061425, -0.7876263)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Trigger"
+
+            def RealityKitStruct "Shape"
+            {
+                float3 extent = (193.52487, 207.2991, 247.9143)
+                float height = 207.2991
+                float radius = 123.95715
+                token shapeType = "Box"
+
+                def RealityKitStruct "pose"
+                {
+                    float3 position = (6.6407967, -8.348492, 8.33078)
+                }
+            }
+        }
+
+        def RealityKitComponent "RigidBody" (
+            active = false
+        )
+        {
+            bool gravityEnabled = 0
+            uniform token info:id = "RealityKit.RigidBody"
+
+            def RealityKitStruct "massFrame"
+            {
+                def RealityKitStruct "m_pose"
+                {
+                }
+            }
+
+            def RealityKitStruct "material"
+            {
+            }
+        }
+
+        def RealityKitComponent "RCP_BehaviorsContainer"
+        {
+            rel behaviors = [
+                </Root/Meteor_explosion/OnCollision>,
+                </Root/Meteor_explosion/OnCollision3>,
+            ]
+            uniform token info:id = "RCP.BehaviorsContainer"
+        }
+
+        def Preliminary_Behavior "OnCollision"
+        {
+            rel actions = </Root/Meteor_explosion/OnCollision/Action>
+            uniform bool exclusive
+            rel triggers = </Root/Meteor_explosion/OnCollision/Trigger>
+
+            def Preliminary_Trigger "Trigger"
+            {
+                rel affectedObjects = </Root/Meteor_explosion>
+                rel colliders = [
+                    </Root/laser_beam_not_animated_2>,
+                    </Root/laser_beam_not_animated_3>,
+                ]
+                token info:id = "Collide"
+            }
+
+            def Preliminary_Action "Action"
+            {
+                rel affectedObjects = </Root>
+                rel animationLibraryKey = </Root/Explosion>
+                rel animationLibraryKeyOverrideKey = </Root/Meteor_explosion/OnCollision/Trigger>
+                token info:id = "PlayTimeline"
+                int loops = 0
+                int performCount = 1
+                token type = "serial"
+            }
+        }
+
+        def RealityKitComponent "AnimationLibrary"
+        {
+            token info:id = "RealityKit.AnimationLibrary"
+
+            def RealityKitAnimationFile "default_subtree_animation"
+            {
+                uniform bool looping = 1
+                uniform string name = "default subtree animation"
+            }
+        }
+
+        def Preliminary_Behavior "OnCollision3"
+        {
+            rel actions = </Root/Meteor_explosion/OnCollision3/Action>
+            uniform bool exclusive
+            rel triggers = </Root/Meteor_explosion/OnCollision3/Trigger>
+
+            def Preliminary_Trigger "Trigger"
+            {
+                rel affectedObjects = </Root/Meteor_explosion>
+                rel colliders = [
+                    </Root/laser_beam_not_animated_2>,
+                    </Root/laser_beam_not_animated_3>,
+                ]
+                token info:id = "Collide"
+            }
+
+            def Preliminary_Action "Action"
+            {
+                rel affectedObjects = </Root>
+                rel animationLibraryKey = </Root/Disable_Beam>
+                rel animationLibraryKeyOverrideKey = </Root/Meteor_explosion/OnCollision3/Trigger>
+                token info:id = "PlayTimeline"
+                int loops = 0
+                int performCount = 1
+                token type = "serial"
+            }
+        }
+    }
+
+    def "laser_beam_not_animated_2" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (0, -0.7884952, 0)
+        }
+        references = @laser_beam_not_animated.usdz@
+    )
+    {
+        float2 ui:nodegraph:node:pos = (40, 40)
+        int ui:nodegraph:node:stackingOrder = 2
+        quatf xformOp:orient = (0.9232858, 0, -0.3841136, 0)
+        float3 xformOp:scale = (0.0004960084, 0.00049600826, 0.0004960084)
+        float3 xformOp:translate = (-0.49325824, 0.02059805, 0.69457084)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Trigger"
+
+            def RealityKitStruct "Shape"
+            {
+                float3 extent = (33.34692, 38.7825, 393.93298)
+                token shapeType = "Box"
+
+                def RealityKitStruct "pose"
+                {
+                }
+            }
+        }
+
+        def RealityKitComponent "RigidBody"
+        {
+            bool gravityEnabled = 0
+            uniform token info:id = "RealityKit.RigidBody"
+
+            def RealityKitStruct "massFrame"
+            {
+                def RealityKitStruct "m_pose"
+                {
+                }
+            }
+
+            def RealityKitStruct "material"
+            {
+            }
+        }
+    }
+
+    def "laser_beam_not_animated_3" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (0, -0.7884952, 0)
+        }
+        references = @laser_beam_not_animated.usdz@
+    )
+    {
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        quatf xformOp:orient = (0.9232858, 0, -0.3841136, 0)
+        float3 xformOp:scale = (0.0004960084, 0.00049600826, 0.0004960084)
+        float3 xformOp:translate = (-0.70186234, 0.020597713, 0.49621198)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "Collider"
+        {
+            uint group = 1
+            uniform token info:id = "RealityKit.Collider"
+            uint mask = 4294967295
+            token type = "Trigger"
+
+            def RealityKitStruct "Shape"
+            {
+                float3 extent = (33.34692, 38.7825, 393.93298)
+                token shapeType = "Box"
+
+                def RealityKitStruct "pose"
+                {
+                }
+            }
+        }
+
+        def RealityKitComponent "RigidBody"
+        {
+            bool gravityEnabled = 0
+            uniform token info:id = "RealityKit.RigidBody"
+
+            def RealityKitStruct "massFrame"
+            {
+                def RealityKitStruct "m_pose"
+                {
+                }
+            }
+
+            def RealityKitStruct "material"
+            {
+            }
+        }
+    }
+
+    def RealityKitTimeline "Disable_Beam"
+    {
+        reorder nameChildren = ["Track", "Track2"]
+        def RealityKitTrack "Track"
+        {
+            reorder nameChildren = ["Disable_Entity", "Laser_Beams_Back"]
+            def RealityKitAction "Disable_Entity"
+            {
+                string actionKind = "disable"
+                double duration = 0
+                uniform token info:id = "05790A27-09BD-41AB-A8E3-FAB53A5FC674"
+                double startTime = 0
+                rel target = </Root/laser_beam_not_animated_2>
+            }
+        }
+
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Disable_Entity"
+            {
+                string actionKind = "disable"
+                double duration = 0
+                uniform token info:id = "D0D28A93-B143-488E-8622-4A52C132DA49"
+                double startTime = 0
+                rel target = </Root/laser_beam_not_animated_3>
+            }
+        }
+    }
+
+    def RealityKitTimeline "Enable_Beam"
+    {
+        reorder nameChildren = ["Track", "Track2", "Track3"]
+        def RealityKitTrack "Track"
+        {
+            def RealityKitAction "Transform_To"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 0.5502251210136674
+                uniform token info:id = "B13E7045-3393-4DF9-93B0-532A17266AEA"
+                float3 position = (-0.49325824, 0.02059805, 0.69457084)
+                quatf rotation = (0.9232858, 0, -0.38411373, 0)
+                float3 scale = (0.0004960084, 0.00049600826, 0.0004960084)
+                double startTime = 0
+                rel target = </Root/laser_beam_not_animated_2>
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                }
+            }
+
+            def RealityKitAction "Enable_Entity"
+            {
+                string actionKind = "enable"
+                double duration = 0
+                uniform token info:id = "1F8DBBB9-A876-4408-9FA9-2F79380A09A1"
+                double startTime = 0.5502251211136674
+                rel target = </Root/laser_beam_not_animated_2>
+            }
+        }
+
+        def RealityKitTrack "Track2"
+        {
+            reorder nameChildren = ["Transform_To", "Enable_Entity"]
+            def RealityKitAction "Transform_To"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 0.5501806307947609
+                uniform token info:id = "C263E9C7-6A24-4EAF-9A4A-6ED8941B59A2"
+                float3 position = (-0.70186234, 0.020597713, 0.49621198)
+                quatf rotation = (0.9232858, 0, -0.38411373, 0)
+                float3 scale = (0.0004960084, 0.00049600826, 0.0004960084)
+                double startTime = 0
+                rel target = </Root/laser_beam_not_animated_3>
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                }
+            }
+
+            def RealityKitAction "Enable_Entity"
+            {
+                string actionKind = "enable"
+                double duration = 0
+                uniform token info:id = "1F8DBBB9-A876-4408-9FA9-2F79380A09A1"
+                double startTime = 0.5501806308947608
+                rel target = </Root/laser_beam_not_animated_3>
+                float2 ui:nodegraph:node:pos = (20, 20)
+                int ui:nodegraph:node:stackingOrder = 1
+            }
+        }
     }
 }
 
